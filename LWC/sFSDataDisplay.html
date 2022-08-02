@@ -1,0 +1,63 @@
+<template>
+    <div class="slds-theme_default" style="height: 600px;">
+        <div>
+            <lightning-datatable
+                    key-field="id"
+                    data={sfsData}
+                    columns={columns}
+                    onrowselection={calculateBalance}
+            >
+            </lightning-datatable>
+        </div>  
+        
+        <template if:true={isEmpty}>
+            <div class="slds-text-align_center slds-text-title_bold">No data to display</div>
+        </template>
+
+        <div class="slds-m-top_medium">
+            <lightning-button variant="brand" label="Add Debt" title="Primary action" onclick={handleAddDebt} class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="brand" label="Remove Debt" title="Primary action" onclick={handleRemoveDebt} class="slds-m-left_x-small" disabled={isEmpty}></lightning-button>
+        </div>
+        <div class="slds-p-top_x-small slds-p-bottom_x-small slds-m-top_medium slds-m-left_x-small slds-m-right_x-small" style="background-color:#33C2FF">
+            <span class="slds-p-left_x-large slds-text-title_bold">Total</span> 
+            <span class="slds-text-title_bold slds-float_right">${totalBalance}</span><br/>
+        </div>
+        <div class="slds-p-top_x-small slds-m-left_x-small">
+            <span class="slds-text-title_bold">Total Row Count : {totalRowsCount}</span>
+            <span class="slds-p-left_xx-large slds-text-title_bold">Check Row Count : {checkedRowsCount}</span>
+        </div>
+    </div>
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                       <lightning-icon icon-name="utility:close"
+                          alternative-text="close"
+                          variant="inverse"
+                          size="small" ></lightning-icon>
+                       <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add New Debt</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div>
+                        <lightning-input type="text" label="Creditor" value={creditor} onchange={handleCreditorChange} placeholder="Please enter Creditor"></lightning-input>
+                        <lightning-input type="text" label="First Name" value={firstName} onchange={handleFirstNameChange} placeholder="Please enter First Name"></lightning-input>
+                        <lightning-input type="text" label="Last Name" value={lastName} onchange={handleLastNameChange} placeholder="Please enter Last Name"></lightning-input>
+                        <lightning-input type="number" label="Min Pay%" value={minPayPer} onchange={handleMinPayPerChange} placeholder="Please enter min pay percentage"></lightning-input>
+                        <lightning-input type="number" label="Balance" value={balance} onchange={handleBalanceChange} placeholder="Please enter Balance"></lightning-input>
+                    </div>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                    <lightning-button variant="brand" label="Save" title="Primary action" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                 </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
